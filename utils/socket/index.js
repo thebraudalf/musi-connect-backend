@@ -5,7 +5,24 @@ import { Server } from "socket.io";
 import { User } from "../../models/user.model.js";
 import { ChatEventEnum } from "../../constants.js";
 
-
+/**
+ * @function initializeSocketIO
+ * Configures the primary Socket.io connection logic and authentication handshake.
+ * 
+ * @process `Authentication:`
+ * 1. Parses cookies from 'socket.handshake.headers' to find the 'accessToken'.
+ * 2. Falls back to checking 'socket.handshake.auth.token' if cookies are missing.
+ * 3. Verifies the JWT and retrieves the user from the database, attaching it to 'socket.user'.
+ * 
+ * @process `Room Management:`
+ * 1. Automatically makes the socket join a room named after the User's ID.
+ * 2. This allows targeted events (like notifications) to reach the user even without an active chat.
+ * 
+ * @events
+ * - 'CONNECTED_EVENT': Emitted to the client upon successful authentication.
+ * - 'DISCONNECT_EVENT': Triggers cleanup, ensuring the user leaves their private ID room.
+ * - 'SOCKET_ERROR_EVENT': Sends descriptive error messages back to the client if the handshake fails.
+ */
 const initializeSocketIO = (io) => {
     return io.on("connection", async (socket) => {
         try {
@@ -59,7 +76,15 @@ const initializeSocketIO = (io) => {
     });
 };
 
-
+/**
+ * @function emitSocketEvent
+ * A global utility for triggering socket events from standard Express controllers.
+ * 
+ * @param {Object} req - The Express request object, used to access the 'io' instance via 'req.app.get("io")'.
+ * @param {string} userId - The target user's ID (the room name) to receive the message.
+ * @param {string} event - The name of the event to emit (defined in ChatEventEnum).
+ * @param {any} payload - The data associated with the event.
+ */
 const emitSocketEvent = (req, userId, event, payload) => {
     req.app.get("io").to(userId).emit(event, payload);
 };
