@@ -1,5 +1,0 @@
-{"event_type":"play","user_id":"1","song_id":"945876", "timestamp":"1-800-234-5678"}
-{"event_type": "pause","user_id":"12","song_id":"987346", "timestamp":"1-800-234-5643243278"}
-{"event_type":"like","user_id":"41","song_id":"965876", "timestamp":"1-800-234324324-5678"}
-{"event_type":"dislike","user_id":"19","song_id":"986476", "timestamp":"1-80432420-23434234-5243678"}
-{"event_type":"play","user_id":"19","song_id":"986476", "timestamp":"1-80432420-23434234-5243678"}
