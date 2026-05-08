@@ -12,10 +12,11 @@ import {
     registerUsingOTP,
     registerWithOTP,
     loginUsingOTP,
-    loginWithOTP
+    loginWithOTP,
+    setPassword
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { registerValidation, registerUsingOTPValidation, registerWithOTPValidation, loginValidation, loginUsingOTPValidation, loginWithOTPValidation, changeCurrentPasswordValidation, updateAccountDetailsValidation, verifyJWT } from "../middlewares/auth.middleware.js";
+import { registerValidation, registerUsingOTPValidation, registerWithOTPValidation, loginValidation, loginUsingOTPValidation, loginWithOTPValidation, changeCurrentPasswordValidation, setPasswordValidation, updateAccountDetailsValidation, verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -60,6 +61,8 @@ router.route("/refresh-token").post(refreshAccessToken);
 // PROTECTED ROUTES (Requires Login):
 // POST /logout: Invalidates session tokens and clears client cookies.
 router.route("/logout").post(verifyJWT, logoutUser);
+// POST /change-password: Validates old password before hashing and saving the new one.
+router.route("/set-password").post(setPasswordValidation, upload.none(), verifyJWT, setPassword)
 // POST /change-password: Validates old password before hashing and saving the new one.
 router.route("/change-password").post(changeCurrentPasswordValidation, upload.none(), verifyJWT, changeCurrentPassword)
 // GET /current-user: Returns the authenticated user's profile data.
