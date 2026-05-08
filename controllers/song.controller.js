@@ -1094,7 +1094,7 @@ const playSong = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         fetchASong[0],
-        "Successfully found searched songs to play",
+        "Successfully found song to play",
       ),
     );
 });
