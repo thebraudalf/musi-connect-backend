@@ -40,6 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (
     [fullName, email, username, password].some((field) => field?.trim() === "")
   ) {
+    console.log("All Fields are required");
     throw new ApiError(400, "All fields are required");
   }
 
@@ -52,6 +53,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (validateAEmail.valid === false) {
+    console.log("Please enter a valid email address.");
     throw new ApiError(400, "Please enter a valid email address.");
   }
 
@@ -62,11 +64,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (existedUser) {
     // Handle existing user
-    if (user.username === username) {
-      throw new ApiError(409, "Username already exists");
-    } else {
-      throw new ApiError(409, "Email already exists");
-    }
+    throw new ApiError(409, "Email or username already exists");
   }
 
   // checking if avatar and coverImage local path is given
@@ -212,7 +210,6 @@ const registerUsingOTP = asyncHandler(async (req, res) => {
 });
 
 // generating access and refresh token
-
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -356,17 +353,7 @@ const registerWithOTP = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          user: createdUser,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-        },
-        "User registered Successfully",
-      ),
-    );
+    .json(new ApiResponse(200, createdUser, "User registered Successfully"));
 });
 
 /**
@@ -393,6 +380,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   // checking validation of fields
   if (!(username || email)) {
+    console.log("username or email is required");
     throw new ApiError(400, "username or email is required");
   }
 
@@ -406,6 +394,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
 
     if (validateAEmail.valid === false) {
+      console.log("Please enter a Valid email address");
       throw new ApiError(400, "Please enter a valid email address.");
     }
   }
@@ -414,7 +403,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({
     $or: [{ username: username }, { email: email }],
   });
-
+  
   if (!user) {
     throw new ApiError(404, "User does not exist");
   }
@@ -810,8 +799,8 @@ const setPassword = asyncHandler(async (req, res) => {
   // finding user with user id(which is saved in db)
   const user = await User.findById(req.user?._id);
 
-  if (!((user.password === null) | undefined)) {
-    throw new Error("Unable to set password for this email.");
+  if (!(user.password === null || user.password === undefined)) {
+    throw new ApiError(401, "Unable to set password for this email.");
   }
 
   // saving new password
@@ -902,7 +891,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   // getting details or fields to update
   const { username, fullName, email } = req.body;
 
-  if (!fullName || !email) {
+  if ([fullName, email, username].some((field) => field?.trim() === "")) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -920,7 +909,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   ).select("-password");
 
   // returning response
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated successfully"));
 });
@@ -950,10 +939,12 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   const oldAvatarPath = extractPublicId(`"${req.user?.avatar}"`);
   //console.log(oldCoverImagePath.trim())
 
-  const oldAvatar = await deleteImageFromCloudinary(oldAvatarPath.trim());
+  if (oldAvatarPath !== undefined) {
+    const oldAvatar = await deleteImageFromCloudinary(oldAvatarPath.trim());
 
-  if (!oldAvatar) {
-    throw new ApiError(400, "Error while deleting old cover image");
+    if (!oldAvatar) {
+      throw new ApiError(400, "Error while deleting old cover image");
+    }
   }
 
   // uploading avatar local path to cloudinary
@@ -1056,6 +1047,7 @@ export {
   loginWithOTP,
   logoutUser,
   refreshAccessToken,
+  setPassword,
   changeCurrentPassword,
   getCurrentUser,
   updateAccountDetails,
