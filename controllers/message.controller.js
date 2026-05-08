@@ -71,7 +71,7 @@ const sendMessage = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Message sent successfully", message));
+    .json(new ApiResponse(200, message, "Message sent successfully"));
 });
 
 /**
@@ -129,7 +129,7 @@ const getAllMessages = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Messages retrieved successfully", messages));
+    .json(new ApiResponse(200, messages, "Messages retrieved successfully"));
 });
 
 /**
@@ -143,7 +143,6 @@ const getMessage = asyncHandler(async (req, res) => {
   // Step 3: If the messages are found, return a success response with the messages
 
   const { messageId } = req.params;
-  console.log("messageId: ", messageId);
 
   if (!messageId) {
     throw new ApiError(400, "Message id is required");
@@ -160,7 +159,7 @@ const getMessage = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Message retrieved successfully", messages));
+    .json(new ApiResponse(200, messages, "Message retrieved successfully"));
 });
 
 /**
@@ -178,7 +177,6 @@ const getLastMessage = asyncHandler(async (req, res) => {
   })
     .sort({ createdAt: -1 })
     .select("recommendedSongs");
-  console.log("messages", lastMessage);
 
   if (!lastMessage) {
     throw new ApiError(400, "Unable to find last message");
@@ -187,7 +185,7 @@ const getLastMessage = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiResponse(200, "Last Message retrieved successfully", lastMessage),
+      new ApiResponse(200, lastMessage, "Last Message retrieved successfully"),
     );
 });
 
