@@ -18,7 +18,6 @@ const searchSong = asyncHandler(async (req, res, next) => {
   try {
     // getting request details
     const { searchQuery } = req.body;
-    console.log(searchQuery);
 
     // checking if the searchQuery is present in the request body
     if (!searchQuery) {
@@ -27,7 +26,6 @@ const searchSong = asyncHandler(async (req, res, next) => {
 
     // calling searchSong function to get song meta data
     const songResponse = await searchaSong(searchQuery, 10);
-    console.log(songResponse);
 
     if (!songResponse) {
       throw new ApiError(400, "Unable to search song");
