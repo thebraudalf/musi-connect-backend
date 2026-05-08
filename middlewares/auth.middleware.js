@@ -226,6 +226,7 @@ export {
   loginValidation,
   loginUsingOTPValidation,
   loginWithOTPValidation,
+  setPasswordValidation,
   changeCurrentPasswordValidation,
   updateAccountDetailsValidation,
   verifyJWT,
