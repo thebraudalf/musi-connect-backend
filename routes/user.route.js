@@ -53,7 +53,7 @@ router.route("/login").post(loginValidation, upload.none(), loginUser);
 // POST /login-using-otp: Handles user is being login using OTP or not.
 router.route("/login-using-otp").post(loginUsingOTPValidation, upload.none(), loginUsingOTP)
 // POST /login-with-otp: Handles user is successfully logged in with OTP or not.
-router.route("/login-with-otp").post(registerWithOTPValidation, upload.none(), loginWithOTP)
+router.route("/login-with-otp").post(loginWithOTPValidation, upload.none(), loginWithOTP)
 
 // POST /refresh-token: Exchanges a valid Refresh Token for a new Access Token.
 router.route("/refresh-token").post(refreshAccessToken);

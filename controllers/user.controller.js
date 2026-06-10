@@ -526,7 +526,7 @@ const loginUsingOTP = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  sendMail(email, "OTP to Log in MusiConnect", `Your OTP is: ${OTP}`);
+  sendMail(user.email, "OTP to Log in MusiConnect", `Your OTP is: ${OTP}`);
 
   // returning response
   return res
@@ -632,7 +632,7 @@ const loginWithOTP = asyncHandler(async (req, res) => {
   await user.save();
 
   sendMail(
-    email,
+    user.email,
     `Welcome Back to MusiConnect, ${user.fullName || "User"}`,
     `Thank you for coming again, ${user.fullName || "User"}\n
     \n Hope we try to elevate your music mood today.\n
