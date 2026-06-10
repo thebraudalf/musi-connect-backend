@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thebraudalf/musi-connect-frontend.git"
+    "url": "git+https://github.com/thebraudalf/musi-connect-backend.git"
   },
   "keywords": [
     "music",
@@ -21,9 +21,9 @@
   "author": "music-connect-team",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thebraudalf/musi-connect-frontend/issues"
+    "url": "https://github.com/thebraudalf/musi-connect-backend/issues"
   },
-  "homepage": "https://github.com/thebraudalf/musi-connect-frontend#readme",
+  "homepage": "https://github.com/thebraudalf/musi-connect-backend#readme",
   "devDependencies": {
     "@jest/globals": "^30.3.0",
     "@types/node": "^25.6.0",
