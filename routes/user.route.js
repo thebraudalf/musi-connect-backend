@@ -59,8 +59,8 @@ router.route("/login-with-otp").post(loginWithOTPValidation, upload.none(), logi
 router.route("/refresh-token").post(refreshAccessToken);
 
 // PROTECTED ROUTES (Requires Login):
-// POST /logout: Invalidates session tokens and clears client cookies.
-router.route("/logout").post(verifyJWT, logoutUser);
+// Delete /logout: Invalidates session tokens and clears client cookies.
+router.route("/logout").delete(verifyJWT, logoutUser);
 // POST /change-password: Validates old password before hashing and saving the new one.
 router.route("/set-password").post(setPasswordValidation, upload.none(), verifyJWT, setPassword)
 // POST /change-password: Validates old password before hashing and saving the new one.

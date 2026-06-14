@@ -104,7 +104,7 @@ const recommendSongMessage = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Message sent successfully", suggestedSongs));
+    .json(new ApiResponse(200, suggestedSongs, "Message sent successfully"));
 });
 
 /**
