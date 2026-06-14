@@ -9,7 +9,7 @@ import Joi from "joi";
  */
 const searchValidation = asyncHandler((req, res, next) => {
   const schema = Joi.object({
-    searchQuery: Joi.string().min(5),
+    searchQuery: Joi.string().min(2),
   });
   const { error } = schema.validate(req.body);
   if (error) {
