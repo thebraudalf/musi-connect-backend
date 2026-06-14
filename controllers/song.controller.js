@@ -1070,7 +1070,7 @@ const playSong = asyncHandler(async (req, res) => {
   }
 
   // creating and updating listeningHistory
-  await ListeningHistory.findOneAndUpdate(
+  const songHistory = await ListeningHistory.findOneAndUpdate(
     {
       userId: req.user._id,
       songId: songId,
@@ -1093,8 +1093,8 @@ const playSong = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        fetchASong[0],
-        "Successfully found song to play",
+        songHistory,
+        "Successfully found history of current song",
       ),
     );
 });
