@@ -1,13 +1,27 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-const connectDB = async () => {
-    try {
-        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/Music-Connect`);
-        console.log(`\n MongoDB connected !! DB HOST: ${connectionInstance.connection.host}`);
-    } catch (error) {
-        console.log("MongoDB connection FAILED", error);
-        process.exit(1);
+dotenv.config();
+
+// Helper function to create a connection
+const makeNewConnection = (uri, dbName) => {
+
+    if (process.env.NODE_ENV === "test") {
+    // Return a "disconnected" connection instance that we will open later in bootstrap.js
+    return mongoose.createConnection(); 
     }
-}
 
-export default connectDB;   
+    const db = mongoose.createConnection(`${uri}`, {
+        dbName: dbName,
+    });
+
+    db.on("connected", () => console.log(`MongoDB connected to ${dbName}`));
+    db.on("error", (err) => console.log(`MongoDB ${dbName} connection FAILED`, err));
+
+    return db;
+};
+
+
+export const userDb = makeNewConnection(process.env.MONGODB_URI, "User");
+export const chatMessageDb = makeNewConnection(process.env.MONGODB_URI, "Chat-Message");
+export const listeningHistoryDb = makeNewConnection(process.env.MONGODB_URI, "Listening-History");
